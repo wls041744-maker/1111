@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="우리 가족의 경주 1박 2일 여행 계획">
+  <title>우리의 경주, 느리게 걷는 이틀</title>
+  <style>
+    :root {
+      --cream: #fffaf0;
+      --paper: #fffdf8;
+      --green: #214c3c;
+      --green-light: #e5efe8;
+      --orange: #d96b32;
+      --orange-light: #fff0e6;
+      --ink: #26332d;
+      --muted: #66736d;
+      --line: #dedbd0;
+      --shadow: 0 8px 24px rgba(33, 76, 60, .10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      font-family: Arial, "Noto Sans KR", sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+    a { color: var(--green); }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 4px solid #f5ad72;
+      outline-offset: 3px;
+    }
+    .wrap { width: min(1100px, calc(100% - 32px)); margin: auto; }
+    header {
+      background: var(--green);
+      color: white;
+      padding: 24px 0 32px;
+    }
+    .eyebrow {
+      color: #ffd2a9;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin: 0 0 6px;
+    }
+    h1, h2, h3 { line-height: 1.25; margin-top: 0; }
+    h1 { font-size: clamp(2.1rem, 7vw, 4.5rem); margin-bottom: 12px; }
+    h2 { color: var(--green); font-size: clamp(1.55rem, 3vw, 2.1rem); }
+    h3 { color: var(--green); font-size: 1.3rem; }
+    .lead { font-size: 1.15rem; max-width: 720px; }
+    .hero-art {
+      width: 100%;
+      height: 210px;
+      margin-top: 24px;
+      border-radius: var(--radius);
+      background: #f8d99e;
+      overflow: hidden;
+    }
+    .hero-art svg { width: 100%; height: 100%; display: block; }
+    main { padding: 38px 0 70px; }
+    section { margin: 0 0 48px; }
+    .section-title { margin-bottom: 18px; }
+    .notice, .card, .day, .source-box {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .notice { padding: 18px 20px; border-left: 7px solid var(--orange); }
+    .muted { color: var(--muted); }
+    .small { font-size: .9rem; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .card { padding: 22px; }
+    .day { padding: 26px; margin-bottom: 22px; }
+    .day-label {
+      display: inline-block;
+      color: white;
+      background: var(--orange);
+      border-radius: 99px;
+      padding: 4px 13px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .timeline { list-style: none; padding: 0; margin: 0; }
+    .timeline li {
+      position: relative;
+      padding: 0 0 23px 33px;
+      border-left: 3px solid #c8d9cd;
+      margin-left: 8px;
+    }
+    .timeline li:last-child { border-left-color: transparent; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -9px;
+      top: 5px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--orange);
+      border: 3px solid var(--paper);
+      box-shadow: 0 0 0 2px var(--orange);
+    }
+    .time { font-weight: bold; color: var(--orange); }
+    .tag {
+      display: inline-block;
+      background: var(--green-light);
+      color: var(--green);
+      padding: 2px 9px;
+      border-radius: 99px;
+      font-size: .88rem;
+      font-weight: bold;
+    }
+    .undecided {
+      background: #fff4cf;
+      border: 1px dashed #c69328;
+      color: #654b08;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    .map-buttons { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
+    .btn {
+      display: inline-block;
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 15px;
+      background: var(--green);
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: .96rem;
+    }
+    .btn:hover { background: #16382c; }
+    .btn.orange { background: var(--orange); }
+    .btn.light { background: var(--green-light); color: var(--green); }
+    .source-box { padding: 18px; margin-top: 16px; }
+    .source-box a { overflow-wrap: anywhere; }
+    .check-summary {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 14px; flex-wrap: wrap; margin-bottom: 16px;
+    }
+    .progress {
+      height: 13px; background: #e5e3da; border-radius: 99px; overflow: hidden;
+      margin: 10px 0 18px;
+    }
+    .progress-bar { height: 100%; width: 0; background: var(--orange); transition: width .2s; }
+    .checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .check-item {
+      display: flex; gap: 10px; align-items: flex-start;
+      padding: 13px; border: 1px solid var(--line); border-radius: 11px;
+      background: #fff;
+    }
+    .check-item input { width: 22px; height: 22px; flex: 0 0 auto; accent-color: var(--green); }
+    .check-item.done span { text-decoration: line-through; color: var(--muted); }
+    footer {
+      background: var(--green); color: white; padding: 30px 0;
+    }
+    footer a { color: #ffe0bf; }
+    .actions {
+      position: sticky; bottom: 12px; z-index: 5;
+      display: flex; gap: 9px; flex-wrap: wrap; margin-top: 25px;
+      padding: 12px; background: rgba(255, 250, 240, .94);
+      border: 1px solid var(--line); border-radius: 14px;
+    }
+    #copyStatus { min-height: 1.5em; color: var(--green); font-weight: bold; }
+    @media (max-width: 650px) {
+      .wrap { width: min(100% - 22px, 1100px); }
+      body { font-size: 17px; }
+      .grid, .checklist { grid-template-columns: 1fr; }
+      .day, .card { padding: 18px; }
+      .hero-art { height: 155px; }
+      .btn { width: 100%; text-align: center; }
+      .actions .btn { width: auto; flex: 1 1 140px; }
+    }
+    @media print {
+      body { background: white; color: #111; }
+      header { color: #111; background: white; padding-bottom: 10px; }
+      .hero-art, .actions, .map-buttons, .no-print { display: none !important; }
+      .notice, .card, .day, .source-box { box-shadow: none; break-inside: avoid; }
+      a { color: #111; text-decoration: underline; }
+      section { margin-bottom: 25px; }
+      .check-item { break-inside: avoid; }
+      .check-item input { display: none; }
+      .check-item::after { content: "준비 " attr(data-state); margin-left: auto; font-weight: bold; }
+      footer { background: white; color: #111; border-top: 1px solid #aaa; }
+      footer a { color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <p class="eyebrow">FAMILY TRIP · GYEONGJU · 1박 2일</p>
+      <h1>우리의 경주,<br>느리게 걷는 이틀.</h1>
+      <p class="lead">성인 2명과 초등학생 1명이 자가용으로 떠나는 경주 가족 여행입니다. 서두르지 않고 걷고, 보고, 쉬는 일정으로 계획했습니다.</p>
+
+      <div class="hero-art" role="img" aria-label="실제 사진이 아닌 경주의 산과 기와집을 표현한 창작 SVG 일러스트">
+        <svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="1000" height="260" fill="#f8d99e"/>
+          <circle cx="820" cy="60" r="38" fill="#fff2bd"/>
+          <path d="M0 180 Q180 80 360 175 T700 150 T1000 160 V260 H0Z" fill="#9fbe9b"/>
+          <path d="M0 210 Q190 120 390 205 T760 185 T1000 195 V260 H0Z" fill="#507e62"/>
+          <path d="M120 195v-43h110v43M105 152l65-47 75 47M137 195v-32h25v32M189 195v-32h25v32" fill="#bd6336"/>
+          <path d="M95 153h145M111 144h130" stroke="#633a29" stroke-width="8"/>
+          <path d="M470 225 Q510 125 555 225" fill="none" stroke="#e8ba6c" stroke-width="12"/>
+          <path d="M650 210v-70M650 155q40-30 80 0M730 210v-70" stroke="#315943" stroke-width="9" fill="none"/>
+          <path d="M645 145q40-38 90 0" stroke="#315943" stroke-width="9" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section aria-labelledby="summary-title">
+      <h2 id="summary-title">여행 요약</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>가족 구성</h3>
+          <p>성인 2명 · 초등학생 1명<br>자가용 · 현지 산책</p>
+        </div>
+        <div class="card">
+          <h3>아직 정하지 않은 것</h3>
+          <p class="undecided">여행 날짜 · 숙소 · 전체 예산 · 둘째 날 점심</p>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:20px">
+        <strong>계획 안내</strong><br>
+        표시된 시간은 계획이며 예약이 아닙니다. 이 페이지의 자료 확인일은 <strong>2026.10.01.</strong>이며 실시간 자동 갱신 정보가 아닙니다. 방문 전 운영 여부, 가격, 휴무와 이용 조건을 다시 확인하세요.
+      </div>
+    </section>
+
+    <section aria-labelledby="schedule-title">
+      <h2 id="schedule-title">날짜별 일정과 방문 순서</h2>
+
+      <article class="day">
+        <span class="day-label">첫째 날</span>
+        <h3>교촌마을에서 걷고, 쉬어 가기</h3>
+        <ol class="timeline">
+          <li><span class="time">오전</span><br><strong>교촌마을 산책</strong><br><span class="muted">한옥 풍경을 천천히 둘러봅니다.</span>
+            <div class="map-buttons">
+              <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=%EA%B2%BD%EC%A3%BC%20%EA%B5%90%EC%B4%8C%ED%95%9C%EC%98%A5%EB%A7%88%EC%9D%84">교촌마을 지도 보기</a>
+              <a class="btn light" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=%EA%B2%BD%EC%A3%BC%20%EA%B5%90%EC%B4%8C%ED%95%9C%EC%98%A5%EB%A7%88%EC%9D%84">교촌마을 길찾기</a>
+            </div>
+          </li>
+          <li><span class="time">점심</span><br><strong>도솔마을</strong><br><span class="muted">한식과 한옥 분위기를 원하는 가족이 선택한 예시입니다.</span></li>
+          <li><span class="time">오후</span><br><strong>황남빵 경주 본점 간식과 휴식</strong><br><span class="muted">간식을 먹으며 잠시 쉬어 갑니다.</span>
+            <div class="map-buttons">
+              <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=%ED%99%A9%EB%82%A8%EB%B9%B5%20%EA%B2%BD%EC%A3%BC%20%EB%B3%B8%EC%A0%90%20%EA%B2%BD%EC%A3%BC%EC%8B%9C%20%ED%83%9C%EC%A2%85%EB%A1%9C%20783">황남빵 본점 지도 보기</a>
+              <a class="btn light" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=%ED%99%A9%EB%82%A8%EB%B9%B5%20%EA%B2%BD%EC%A3%BC%20%EB%B3%B8%EC%A0%90%20%EA%B2%BD%EC%A3%BC%EC%8B%9C%20%ED%83%9C%EC%A2%85%EB%A1%9C%20783">황남빵 본점 길찾기</a>
+            </div>
+          </li>
+        </ol>
+      </article>
+
+      <article class="day">
+        <span class="day-label">둘째 날</span>
+        <h3>박물관을 보고 귀가하기</h3>
+        <ol class="timeline">
+          <li><span class="time">오전</span><br><strong>국립경주박물관</strong><br><span class="muted">경주시 일정로 186. 전시를 천천히 관람합니다.</span>
+            <div class="map-buttons">
+              <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=%EA%B5%AD%EB%A6%BD%EA%B2%BD%EC%A3%BC%EB%B0%95%EB%AC%BC%EA%B4%80%20%EA%B2%BD%EC%A3%BC%EC%8B%9C%20%EC%9D%BC%EC%A0%95%EB%A1%9C%20186">박물관 지도 보기</a>
+              <a class="btn light" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=%EA%B5%AD%EB%A6%BD%EA%B2%BD%EC%A3%BC%EB%B0%95%EB%AC%BC%EA%B4%80%20%EA%B2%BD%EC%A3%BC%EC%8B%9C%20%EC%9D%BC%EC%A0%95%EB%A1%9C%20186">박물관 길찾기</a>
+            </div>
+          </li>
+          <li><span class="time">점심</span><br><strong>미정</strong><br><span class="undecided">둘째 날 점심 식당은 정하지 않았습니다.</span></li>
+          <li><span class="time">이후</span><br><strong>귀가</strong></li>
+        </ol>
+      </article>
+
+      <div class="notice">
+        <strong>우천 시 대안</strong><br>
+        비가 오면 <strong>국립경주박물관을 첫째 날로 옮기는 방법</strong>을 고려합니다. 박물관 운영 여부와 관람 조건은 방문 전 별도로 확인합니다.
+      </div>
+    </section>
+
+    <section aria-labelledby="food-title">
+      <h2 id="food-title">선택한 식당과 간식</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="tag">점심 예시</span>
+          <h3>도솔마을</h3>
+          <p>한식 메뉴와 대릉원 인근 위치, 입구 단차 안내를 한국관광공사 자료에서 확인했습니다. 한식과 한옥 분위기를 원하는 가족이 선택한 예시입니다.</p>
+          <p class="undecided">가격·휴무·아이에게 맞는 메뉴는 방문 전 확인</p>
+          <div class="map-buttons">
+            <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=%EA%B2%BD%EC%A3%BC%20%ED%99%A9%EB%82%A8%EB%8F%99%20%EB%8F%84%EC%86%94%EB%A7%88%EC%9D%84">도솔마을 지도 보기</a>
+            <a class="btn light" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=%EA%B2%BD%EC%A3%BC%20%ED%99%A9%EB%82%A8%EB%8F%99%20%EB%8F%84%EC%86%94%EB%A7%88%EC%9D%84">도솔마을 길찾기</a>
+          </div>
+          <div class="source-box small">
+            <strong>출처</strong><br>
+            <a target="_blank" rel="noopener noreferrer" href="https://korean.visitkorea.or.kr/detail/ms_detail.do?cotid=d06abea6-281a-4f99-8dc0-07aca9ec1b05">한국관광공사 도솔마을 안내</a><br>
+            확인일: 2026.10.01.
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="tag">간식</span>
+          <h3>황남빵 경주 본점</h3>
+          <p>주소: 경주시 태종로 783</p>
+          <p>공식 안내에서 본점과 주소를 확인했습니다.</p>
+          <p class="undecided">가격·구매 수량·방문일 영업은 추가 확인</p>
+          <div class="map-buttons">
+            <a class="btn" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=%ED%99%A9%EB%82%A8%EB%B9%B5%20%EA%B2%BD%EC%A3%BC%20%EB%B3%B8%EC%A0%90%20%EA%B2%BD%EC%A3%BC%EC%8B%9C%20%ED%83%9C%EC%A2%85%EB%A1%9C%20783">황남빵 지도 보기</a>
+            <a class="btn light" target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/dir/?api=1&destination=%ED%99%A9%EB%82%A8%EB%B9%B5%20%EA%B2%BD%EC%A3%BC%20%EB%B3%B8%EC%A0%90%20%EA%B2%BD%EC%A3%BC%EC%8B%9C%20%ED%83%9C%EC%A2%85%EB%A1%9C%20783">황남빵 길찾기</a>
+          </div>
+          <div class="source-box small">
+            <strong>출처</strong><br>
+            <a target="_blank" rel="noopener noreferrer" href="https://m.hwangnam.co.kr/index.html">황남빵 공식 안내</a><br>
+            확인일: 2026.10.01.
+          </div>
+        </article>
+      </div>
+      <p class="muted small">Google 지도 버튼은 외부 링크만 엽니다. 실제 도로 경로와 이동시간은 이 페이지가 계산하거나 보장하지 않습니다. 길찾기 화면에서 출발지를 직접 선택하세요.</p>
+    </section>
+
+    <section aria-labelledby="source-title">
+      <h2 id="source-title">장소 자료</h2>
+      <div class="source-box">
+        <p><strong>교촌마을 자료</strong><br>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.gyeongju.go.kr/design/tour2019/file/tourMap/tourMap2_250821.pdf">경주 관광 지도 PDF</a>
+        </p>
+        <p><strong>국립경주박물관 자료</strong><br>
+          주소: 경주시 일정로 186<br>
+          <a target="_blank" rel="noopener noreferrer" href="https://gyeongju.museum.go.kr/kor/html/sub01/0102.html">국립경주박물관 공식 안내</a>
+        </p>
+        <p class="small muted">모든 자료 확인일: 2026.10.01. 운영시간·휴무·관람 조건은 방문 전 다시 확인하세요.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="packing-title">
+      <h2 id="packing-title">준비물 체크</h2>
+      <div class="card">
+        <div class="check-summary">
+          <strong id="checkText">준비 완료 0/8 · 0%</strong>
+          <button class="btn light no-print" id="resetBtn" type="button">이 여행 체크 초기화</button>
+        </div>
+        <div class="progress" aria-label="준비물 진행률"><div class="progress-bar" id="progressBar"></div></div>
+        <div id="storageNotice" class="small muted" role="status"></div>
+        <div class="checklist" id="checklist">
+          <label class="check-item" data-id="p01"><input type="checkbox"><span><strong>p01</strong> 개인 편한 신발</span></label>
+          <label class="check-item" data-id="p02"><input type="checkbox"><span><strong>p02</strong> 개인 겉옷</span></label>
+          <label class="check-item" data-id="p03"><input type="checkbox"><span><strong>p03</strong> 공통 충전기</span></label>
+          <label class="check-item" data-id="p04"><input type="checkbox"><span><strong>p04</strong> 공통 보조배터리</span></label>
+          <label class="check-item" data-id="p05"><input type="checkbox"><span><strong>p05</strong> 개인 물병</span></label>
+          <label class="check-item" data-id="p06"><input type="checkbox"><span><strong>p06</strong> 활동 접이식 우산</span></label>
+          <label class="check-item" data-id="p07"><input type="checkbox"><span><strong>p07</strong> 공통 휴지·물티슈</span></label>
+          <label class="check-item" data-id="p08"><input type="checkbox"><span><strong>p08</strong> 개인 세면도구</span></label>
+        </div>
+        <p class="small muted">체크 상태는 이 브라우저와 기기에만 저장됩니다. 다른 가족과 동기화되지 않습니다. file: 환경에서는 저장이 보장되지 않으므로 게시 주소에서 확인하세요. 저장에 실패해도 체크와 인쇄는 계속 사용할 수 있습니다.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="share-title">
+      <h2 id="share-title">공유·인쇄</h2>
+      <div class="card">
+        <p>공개 링크는 가족만 접근하는 비공개 공간이 아닐 수 있으므로 공개해도 되는 내용만 포함했습니다.</p>
+        <div class="actions no-print">
+          <button class="btn orange" id="shareBtn" type="button">게시 주소 복사</button>
+          <button class="btn" id="printBtn" type="button">인쇄 / PDF 저장</button>
+        </div>
+        <p id="copyStatus" role="status"></p>
+        <input id="copyFallback" aria-label="복사할 페이지 주소" style="position:absolute;left:-9999px" readonly>
+        <p class="small muted">로컬 파일에서는 공유할 수 있는 게시 주소가 없으므로 GitHub Pages 등에 게시한 뒤 공유하세요. 복사 권한이 없으면 아래 주소를 선택해 Ctrl+C로 복사할 수 있습니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p><strong>우리의 경주, 느리게 걷는 이틀.</strong></p>
+      <p class="small">이 페이지는 확정한 여행 계획을 보여주는 기록입니다. 예약·실시간 정보·경로 계산을 제공하지 않습니다.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var STORAGE_KEY = "gyeongju-family-trip-20261001-packing-v1";
+      var ids = ["p01", "p02", "p03", "p04", "p05", "p06", "p07", "p08"];
+      var boxes = document.querySelectorAll("#checklist input");
+      var notice = document.getElementById("storageNotice");
+
+      function readState() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return {};
+          var parsed = JSON.parse(raw);
+          if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("invalid");
+          var clean = {};
+          ids.forEach(function (id) {
+            if (parsed[id] === true) clean[id] = true;
+          });
+          return clean;
+        } catch (e) {
+          notice.textContent = "저장된 체크 정보를 읽지 못했습니다. 현재 체크와 인쇄는 사용할 수 있습니다.";
+          return {};
+        }
+      }
+
+      function saveState(state) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          notice.textContent = "이 브라우저와 기기에 체크 상태를 저장했습니다.";
+        } catch (e) {
+          notice.textContent = "브라우저 저장이 차단되어 체크 상태를 저장하지 못했습니다. 현재 화면에서는 계속 사용할 수 있습니다.";
+        }
+      }
+
+      function update() {
+        var count = 0;
+        boxes.forEach(function (box) {
+          var item = box.closest(".check-item");
+          var checked = box.checked;
+          if (checked) count++;
+          item.classList.toggle("done", checked);
+          item.dataset.state = checked ? "완료" : "미완료";
+        });
+        var total = boxes.length;
+        var percent = total ? Math.round(count / total * 100) : 0;
+        document.getElementById("checkText").textContent =
+          "준비 완료 " + count + "/" + total + " · " + percent + "%";
+        document.getElementById("progressBar").style.width = percent + "%";
+      }
+
+      var saved = readState();
+      boxes.forEach(function (box) {
+        var id = box.closest(".check-item").dataset.id;
+        box.checked = saved[id] === true;
+        box.addEventListener("change", function () {
+          var state = {};
+          boxes.forEach(function (b) {
+            if (b.checked) state[b.closest(".check-item").dataset.id] = true;
+          });
+          saveState(state);
+          update();
+        });
+      });
+      update();
+
+      document.getElementById("resetBtn").addEventListener("click", function () {
+        if (!window.confirm("이 여행의 준비물 체크 상태를 모두 지울까요?")) return;
+        boxes.forEach(function (box) { box.checked = false; });
+        try {
+          localStorage.removeItem(STORAGE_KEY);
+          notice.textContent = "이 여행의 체크 상태를 초기화했습니다.";
+        } catch (e) {
+          notice.textContent = "저장소에 접근할 수 없어 화면의 체크만 초기화했습니다.";
+        }
+        update();
+      });
+
+      document.getElementById("printBtn").addEventListener("click", function () {
+        window.print();
+      });
+
+      document.getElementById("shareBtn").addEventListener("click", function () {
+        var status = document.getElementById("copyStatus");
+        var url = window.location.href;
+        if (window.location.protocol === "file:") {
+          status.textContent = "현재는 로컬 파일입니다. GitHub Pages에 게시한 뒤 공유하세요.";
+          return;
+        }
+        var fallback = document.getElementById("copyFallback");
+        fallback.value = url;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(url).then(function () {
+            status.textContent = "현재 게시 주소를 복사했습니다.";
+          }).catch(function () {
+            fallback.style.position = "static";
+            fallback.select();
+            status.textContent = "복사 권한이 없습니다. 주소를 선택했으니 Ctrl+C로 복사하세요.";
+          });
+        } else {
+          fallback.style.position = "static";
+          fallback.select();
+          status.textContent = "복사 권한이 없습니다. 주소를 선택했으니 Ctrl+C로 복사하세요.";
+        }
+      });
+    }());
+  </script>
+</body>
+</html>
